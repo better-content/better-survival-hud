@@ -103,10 +103,15 @@ public final class DynamicHudController {
 
     public static void setInjuryHealth(boolean atDoor, float health, double probability) {
         injuryAtDoor = atDoor;
-        semanticHealth = Math.max(0, health);
+        semanticHealth = displayHealth(atDoor, health);
         double bounded = Math.max(0, Math.min(1, probability));
         if (Double.compare(injuryProbability, bounded) != 0) reveal(HudElement.HEALTH);
         injuryProbability = bounded;
+    }
+
+    /** Death's Door is a semantic zero-heart state even while the server keeps a sentinel HP value. */
+    static float displayHealth(boolean atDoor, float health) {
+        return atDoor ? 0 : Math.max(0, health);
     }
 
     public static float healthAlpha(float partialTick) {
@@ -173,7 +178,7 @@ public final class DynamicHudController {
     private static void sample(final LocalPlayer player, final Minecraft minecraft) {
         final double dangerFraction = DynamicSurvivalHudConfig.dynamicHudDangerFraction();
 
-        final float displayedHealth = Float.isNaN(semanticHealth) ? player.getHealth() : semanticHealth;
+        final float displayedHealth = Float.isNaN(semanticHealth) ? displayHealth(injuryAtDoor, player.getHealth()) : semanticHealth;
         update(HudElement.HEALTH, new HealthValue(displayedHealth, player.getAbsorptionAmount(), player.getMaxHealth()));
         danger(HudElement.HEALTH, injuryAtDoor || healthDangerous(displayedHealth, player.getMaxHealth(), dangerFraction));
 
