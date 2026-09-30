@@ -1,7 +1,7 @@
-package com.bettercontent.dynamicsurvivalhud.mixin;
+package com.bettercontent.bettersurvivalhud.mixin;
 
-import com.bettercontent.dynamicsurvivalhud.client.hud.DynamicHudController;
-import com.bettercontent.dynamicsurvivalhud.client.hud.DynamicHudRenderState;
+import com.bettercontent.bettersurvivalhud.client.hud.DynamicHudController;
+import com.bettercontent.bettersurvivalhud.client.hud.DynamicHudRenderState;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;

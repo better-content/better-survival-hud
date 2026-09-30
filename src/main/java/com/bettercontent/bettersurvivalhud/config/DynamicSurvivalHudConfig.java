@@ -1,4 +1,4 @@
-package com.bettercontent.dynamicsurvivalhud.config;
+package com.bettercontent.bettersurvivalhud.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 

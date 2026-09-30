@@ -18,4 +18,4 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "dynamic-survival-hud"
+rootProject.name = "better-survival-hud"

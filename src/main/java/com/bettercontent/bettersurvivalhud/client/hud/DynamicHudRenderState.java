@@ -1,4 +1,4 @@
-package com.bettercontent.dynamicsurvivalhud.client.hud;
+package com.bettercontent.bettersurvivalhud.client.hud;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.resources.ResourceLocation;

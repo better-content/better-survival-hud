@@ -1,4 +1,4 @@
-package com.bettercontent.dynamicsurvivalhud.client.api;
+package com.bettercontent.bettersurvivalhud.client.api;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 

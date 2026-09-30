@@ -1,6 +1,6 @@
-package com.bettercontent.dynamicsurvivalhud.mixin;
+package com.bettercontent.bettersurvivalhud.mixin;
 
-import com.bettercontent.dynamicsurvivalhud.client.hud.DynamicHudRenderState;
+import com.bettercontent.bettersurvivalhud.client.hud.DynamicHudRenderState;
 import com.mojang.blaze3d.systems.RenderSystem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

@@ -1,4 +1,4 @@
-package com.bettercontent.dynamicsurvivalhud.client.hud;
+package com.bettercontent.bettersurvivalhud.client.hud;
 
 import com.momosoftworks.coldsweat.api.temperature.modifier.FoodTempModifier;
 import com.momosoftworks.coldsweat.api.temperature.modifier.TempModifier;

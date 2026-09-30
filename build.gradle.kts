@@ -93,7 +93,7 @@ tasks.named<Jar>("jar") {
     dependsOn(tasks.named("compileJava"))
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from(layout.buildDirectory.file("tmp/compileJava/compileJava-refmap.json")) {
-        rename { "dynamic_survival_hud.refmap.json" }
+        rename { "better_survival_hud.refmap.json" }
     }
     finalizedBy("reobfJar")
 }
@@ -155,8 +155,8 @@ val verifyRuntimeJar by tasks.registering {
 
     doLast {
         ZipFile(runtimeJar.get().asFile).use { zip ->
-            val refmap = zip.getEntry("dynamic_survival_hud.refmap.json")
-                ?: throw GradleException("Runtime JAR is missing dynamic_survival_hud.refmap.json")
+            val refmap = zip.getEntry("better_survival_hud.refmap.json")
+                ?: throw GradleException("Runtime JAR is missing better_survival_hud.refmap.json")
             val refmapText = zip.getInputStream(refmap).bufferedReader().use { it.readText() }
             check(refmapText.contains("GuiMixin") && refmapText.contains("renderHotbar") && refmapText.contains("renderSlot")) {
                 "Runtime refmap lacks the production mappings for GuiMixin"
@@ -195,6 +195,6 @@ tasks.processResources {
 }
 
 mixin {
-    add(sourceSets.main.get(), "dynamic_survival_hud.refmap.json")
-    config("dynamic_survival_hud.mixins.json")
+    add(sourceSets.main.get(), "better_survival_hud.refmap.json")
+    config("better_survival_hud.mixins.json")
 }

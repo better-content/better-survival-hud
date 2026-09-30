@@ -1,7 +1,7 @@
-package com.bettercontent.dynamicsurvivalhud.client.hud;
+package com.bettercontent.bettersurvivalhud.client.hud;
 
-import com.bettercontent.dynamicsurvivalhud.DynamicSurvivalHud;
-import com.bettercontent.dynamicsurvivalhud.config.DynamicSurvivalHudConfig;
+import com.bettercontent.bettersurvivalhud.DynamicSurvivalHud;
+import com.bettercontent.bettersurvivalhud.config.DynamicSurvivalHudConfig;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;

@@ -1,4 +1,4 @@
-package com.bettercontent.dynamicsurvivalhud.client.hud;
+package com.bettercontent.bettersurvivalhud.client.hud;
 
 import org.junit.jupiter.api.Test;
 

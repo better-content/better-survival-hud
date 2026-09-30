@@ -1,6 +1,6 @@
-package com.bettercontent.dynamicsurvivalhud.client.api;
+package com.bettercontent.bettersurvivalhud.client.api;
 
-import com.bettercontent.dynamicsurvivalhud.client.hud.DynamicHudController;
+import com.bettercontent.bettersurvivalhud.client.hud.DynamicHudController;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
