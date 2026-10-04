@@ -126,12 +126,6 @@ tasks.test {
     finalizedBy(tasks.jacocoTestReport)
 }
 
-tasks.register("headlessGameTest") {
-    group = "verification"
-    description = "Runs Forge game tests in a headless dedicated server."
-    dependsOn(tasks.named("runGameTestServer"))
-}
-
 tasks.register("verifyFast") {
     group = "verification"
     description = "Runs deterministic unit/resource checks without Forge game tests."
