@@ -1,5 +1,11 @@
 # Better Survival HUD
 
+## Scope and authority
+
+This repository owns its mod-specific behavior and authoring inputs. Read [local instructions](AGENTS.md)
+and the [shared documentation/policy index](../../better-content-modpack/docs/README.md).
+
+
 Forge 1.20.1 client mod that fades inactive survival HUD elements while retaining danger and interaction cues.
 
 ## Verification
