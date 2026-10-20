@@ -1,6 +1,7 @@
 package com.bettercontent.bettersurvivalhud.client.hud;
 
 import com.bettercontent.bettersurvivalhud.DynamicSurvivalHud;
+import com.bettercontent.bettersurvivalhud.diagnostics.PlaytestDiagnostics;
 import com.bettercontent.bettersurvivalhud.config.DynamicSurvivalHudConfig;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
@@ -65,7 +66,7 @@ public final class DynamicHudController {
 
     static {
         for (HudElement element : HudElement.values()) {
-            STATES.put(element, new HudFadeState());
+            STATES.put(element, new HudFadeState(element.name(), PlaytestDiagnostics.LOG));
         }
     }
 
@@ -81,6 +82,9 @@ public final class DynamicHudController {
         final boolean enabled = DynamicSurvivalHudConfig.dynamicHudEnabled();
         if (enabled && !wasEnabled) {
             reset(player);
+        }
+        if (enabled != wasEnabled && PlaytestDiagnostics.LOG.enabled("visibility")) {
+            PlaytestDiagnostics.LOG.event("visibility", "hud.enabled", "client", enabled ? "enabled" : "disabled", "config_changed", null);
         }
         wasEnabled = enabled;
 
@@ -102,6 +106,9 @@ public final class DynamicHudController {
     }
 
     public static void setInjuryHealth(boolean atDoor, float health, double probability) {
+        if (injuryAtDoor != atDoor && PlaytestDiagnostics.LOG.enabled("visibility")) {
+            PlaytestDiagnostics.LOG.event("visibility", "hud.injury_door", "client", atDoor ? "entered" : "left", "provider_semantics", null);
+        }
         injuryAtDoor = atDoor;
         semanticHealth = displayHealth(atDoor, health);
         double bounded = Math.max(0, Math.min(1, probability));
@@ -123,6 +130,9 @@ public final class DynamicHudController {
     public static void onPhysicalSneak(final boolean down) {
         if (down == peeking) return;
         peeking = down;
+        if (PlaytestDiagnostics.LOG.enabled("visibility")) {
+            PlaytestDiagnostics.LOG.event("visibility", "hud.peek", "client", down ? "entered" : "left", "physical_sneak", null);
+        }
         if (!down) {
             revealAll();
         }
@@ -282,6 +292,9 @@ public final class DynamicHudController {
     }
 
     private static void reset(final LocalPlayer player) {
+        if (trackedPlayer != player && PlaytestDiagnostics.LOG.enabled("visibility")) {
+            PlaytestDiagnostics.LOG.event("visibility", "hud.context", "client", "reset", player == null ? "player_left" : "player_changed", null);
+        }
         trackedPlayer = player;
         injuryAtDoor = false;
         semanticHealth = Float.NaN;

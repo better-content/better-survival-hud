@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.bettercontent.bettersurvivalhud.diagnostics.PlaytestLog;
+import java.util.ArrayList;
+import java.util.Properties;
 import org.junit.jupiter.api.Test;
 
 final class HudFadeStateTest {
@@ -77,6 +80,27 @@ final class HudFadeStateTest {
         assertFalse(state.isDangerous());
         assertEquals(Integer.MAX_VALUE, state.ageTicks());
         assertEquals(0.0F, state.alpha(0.0F, 100, 10, false));
+    }
+
+    @Test
+    void loggingObservesOnlyDangerEdgesAndDoesNotChangeFadeTiming() {
+        var records = new ArrayList<String>();
+        PlaytestLog.Sink sink = new PlaytestLog.Sink() {
+            public boolean enabled(String category, String level) { return true; }
+            public void write(String category, String level, String message) { records.add(message); }
+        };
+        var state = new HudFadeState("HEALTH", new PlaytestLog("better_survival_hud", sink, () -> 0, new Properties()));
+        state.setDangerous(true);
+        for (int i = 0; i < 200; i++) { state.setDangerous(true); state.tick(); state.alpha(0.5F, 100, 10, false); }
+        assertEquals(1, records.size());
+        assertEquals(1.0F, state.alpha(0.5F, 100, 10, false));
+        state.setDangerous(false);
+        assertEquals(2, records.size());
+        assertTrue(records.get(0).contains("result=entered"));
+        assertTrue(records.get(1).contains("result=left"));
+        assertEquals(0, state.ageTicks());
+        tick(state, 105);
+        assertEquals(0.5F, state.alpha(0, 100, 10, false));
     }
 
     private static void tick(final HudFadeState state, final int count) {

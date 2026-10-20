@@ -8,6 +8,17 @@ and the [shared documentation/policy index](../../better-content-modpack/docs/RE
 
 Forge 1.20.1 client mod that fades inactive survival HUD elements while retaining danger and interaction cues.
 
+## Bounded playtest diagnostics
+
+`bc.playtest.better_survival_hud.*` uses loader SLF4J: one INFO startup status with effective
+client enabled state/provider versions and owner source metadata (or UNKNOWN), DEBUG danger
+edges, physical-peek/config/player-context and semantic Death's Door transitions. Native ticks,
+render/alpha queries, changing raw values and unchanged danger states do not produce detail.
+No health authority, item data or player references are retained by diagnostics. One shared
+120/minute burst20 bucket, 256 aggregation keys, 2048-character record limit and 30-second
+summary window bound output; disconnect clears aggregate state without replenishing allowance.
+Normal standalone remains INFO. These records are not native framebuffer acceptance.
+
 ## Verification
 
 Run `./gradlew verifyFull stageRuntimeJar` before committing or pushing. `verifyFull`

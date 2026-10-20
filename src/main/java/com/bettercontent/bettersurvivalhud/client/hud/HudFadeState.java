@@ -1,8 +1,16 @@
 package com.bettercontent.bettersurvivalhud.client.hud;
 
+import com.bettercontent.bettersurvivalhud.diagnostics.PlaytestDiagnostics;
+import com.bettercontent.bettersurvivalhud.diagnostics.PlaytestLog;
+
 public final class HudFadeState {
     private int ageTicks;
     private boolean dangerous;
+    private final String element;
+    private final PlaytestLog diagnostics;
+
+    public HudFadeState() { this("unknown", PlaytestDiagnostics.LOG); }
+    HudFadeState(String element, PlaytestLog diagnostics) { this.element = element; this.diagnostics = diagnostics; }
 
     public void tick() {
         if (!dangerous && ageTicks < Integer.MAX_VALUE) {
@@ -20,10 +28,15 @@ public final class HudFadeState {
     }
 
     public void setDangerous(final boolean dangerous) {
+        boolean changed = this.dangerous != dangerous;
         if (this.dangerous && !dangerous) {
             reveal();
         }
         this.dangerous = dangerous;
+        if (changed && diagnostics.enabled("visibility")) {
+            diagnostics.event("visibility", "hud.danger", "client", dangerous ? "entered" : "left", "semantic_threshold",
+                    () -> PlaytestLog.fields("element", element));
+        }
     }
 
     public boolean isDangerous() {
