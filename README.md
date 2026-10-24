@@ -1,10 +1,6 @@
 # Better Survival HUD
 
-## Scope and authority
-
-This repository owns its mod-specific behavior and authoring inputs. Read [local instructions](AGENTS.md)
-and the [shared documentation/policy index](../../better-content-modpack/docs/README.md).
-
+## Scope
 
 Forge 1.20.1 client mod that fades inactive survival HUD elements while retaining danger and interaction cues.
 
@@ -21,7 +17,7 @@ Normal standalone remains INFO. These records are not native framebuffer accepta
 
 ## Verification
 
-Run `./gradlew verifyFull stageRuntimeJar` before committing or pushing. `verifyFull`
+`verifyFull`
 runs the deterministic JVM/resource checks and validates the runtime JAR's production
 mixin refmap. `verifyFast` runs just the deterministic checks.
 
