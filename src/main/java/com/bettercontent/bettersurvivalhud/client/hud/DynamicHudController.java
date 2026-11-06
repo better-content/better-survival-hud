@@ -7,6 +7,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PlayerRideableJumping;
@@ -189,6 +190,10 @@ public final class DynamicHudController {
         final double dangerFraction = DynamicSurvivalHudConfig.dynamicHudDangerFraction();
 
         final float displayedHealth = Float.isNaN(semanticHealth) ? displayHealth(injuryAtDoor, player.getHealth()) : semanticHealth;
+        final HealthValue previousHealth = (HealthValue) PREVIOUS_VALUES.get(HudElement.HEALTH);
+        if (previousHealth != null && displayedHealth > previousHealth.health()) {
+            reveal(HudElement.HUNGER);
+        }
         update(HudElement.HEALTH, new HealthValue(displayedHealth, player.getAbsorptionAmount(), player.getMaxHealth()));
         danger(HudElement.HEALTH, injuryAtDoor || healthDangerous(displayedHealth, player.getMaxHealth(), dangerFraction));
 
@@ -196,7 +201,11 @@ public final class DynamicHudController {
 
         final int food = player.getFoodData().getFoodLevel();
         update(HudElement.HUNGER, food);
-        danger(HudElement.HUNGER, depleted(food, 20));
+        // At 18+ food, natural healing can consume hunger even when the food bar is full.
+        final boolean canHealFromFood = !injuryAtDoor && player.getHealth() > 0
+                && player.getHealth() < player.getMaxHealth() && food >= 18
+                && player.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
+        danger(HudElement.HUNGER, depleted(food, 20) || canHealFromFood);
 
         final int air = player.getAirSupply();
         update(HudElement.AIR, air);
