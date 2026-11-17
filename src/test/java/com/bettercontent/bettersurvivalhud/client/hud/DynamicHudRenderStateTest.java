@@ -3,6 +3,7 @@ package com.bettercontent.bettersurvivalhud.client.hud;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import net.minecraft.resources.ResourceLocation;
 import org.junit.jupiter.api.AfterEach;
@@ -50,5 +51,20 @@ final class DynamicHudRenderStateTest {
         }
 
         assertEquals(0.0F, DynamicHudRenderState.alpha());
+    }
+
+    @Test
+    void nestedFullVisibilityScopesRestoreFadeOnlyAfterLastPop() {
+        DynamicHudRenderState.begin(HEALTH, 0.25F);
+        DynamicHudRenderState.pushFullVisibility();
+        DynamicHudRenderState.pushFullVisibility();
+        assertEquals(0.8F, DynamicHudRenderState.multiplyAlpha(0.8F), 0.0001F);
+
+        DynamicHudRenderState.popFullVisibility();
+        assertEquals(0.8F, DynamicHudRenderState.multiplyAlpha(0.8F), 0.0001F);
+        DynamicHudRenderState.popFullVisibility();
+        assertEquals(0.2F, DynamicHudRenderState.multiplyAlpha(0.8F), 0.0001F);
+        assertThrows(IllegalStateException.class, DynamicHudRenderState::popFullVisibility);
+        assertEquals(0.2F, DynamicHudRenderState.multiplyAlpha(0.8F), 0.0001F);
     }
 }
