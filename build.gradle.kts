@@ -58,8 +58,24 @@ repositories {
     mavenCentral()
 }
 
+val nativeDietProbe by configurations.creating
+
 dependencies {
     minecraft("net.minecraftforge:forge:${property("minecraft_version")}-${property("forge_version")}")
+    nativeDietProbe("curse.maven:diet-443570:4813904") { isTransitive = false }
+    // Only a compile boundary: HUD is still optional at runtime and core never
+    // compiles against HUD implementation. Rebuild core first for source changes.
+    val physiologyClasses = providers.gradleProperty("physiologyCompileClasses").orNull
+        ?: "../better-survival-physiology/build/classes/java/main"
+    check(file(physiologyClasses).resolve("com/bettercontent/bettersurvivalphysiology/client/ClientMetabolicState.class").isFile) {
+        "Compile Physiology first or bind -PphysiologyCompileClasses=/absolute/classes/path"
+    }
+    compileOnly(files(physiologyClasses))
+    testCompileOnly(files(physiologyClasses))
+    testRuntimeOnly(files(physiologyClasses)) // HUD presentation tests consume the source-owned snapshot
+    compileOnly(fg.deobf("curse.maven:diet-443570:4813904"))
+    testCompileOnly(fg.deobf("curse.maven:diet-443570:4813904"))
+    testRuntimeOnly(fg.deobf("curse.maven:diet-443570:4813904"))
     compileOnly(fg.deobf("curse.maven:hyle-609850:7736352"))
     compileOnly(fg.deobf("curse.maven:thirst-was-taken-679270:6660408"))
     compileOnly(fg.deobf("curse.maven:cold-sweat-506194:7893262"))
@@ -123,6 +139,7 @@ tasks.named<JavaCompile>("compileJava") {
 
 tasks.test {
     useJUnitPlatform()
+    systemProperty("salience.nativeDiet", nativeDietProbe.singleFile.absolutePath)
     finalizedBy(tasks.jacocoTestReport)
 }
 
