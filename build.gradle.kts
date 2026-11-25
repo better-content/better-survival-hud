@@ -134,7 +134,11 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 tasks.named<JavaCompile>("compileJava") {
-    outputs.file(layout.buildDirectory.file("tmp/compileJava/compileJava-refmap.json"))
+    val refmap = layout.buildDirectory.file("tmp/compileJava/compileJava-refmap.json")
+    outputs.file(refmap)
+    // A rerun with no changed Java sources must still run the Mixin processor.
+    options.isIncremental = false
+    doLast { check(refmap.get().asFile.isFile) { "Production Mixin refmap was not generated" } }
 }
 
 tasks.test {
